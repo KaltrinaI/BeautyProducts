@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"com.example.enchanted.Controller","l":"AdminController"},{"l":"All Classes and Interfaces","u":"allclasses-index.html"}];updateSearchResults();
