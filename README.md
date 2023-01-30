@@ -7,7 +7,7 @@ This is a Java Spring Boot application that is designed to demonstrate the capab
 #### Requirements
 - Java 8 or later
 - Gradle 6.5 or later
-- Spring Boot 2.3.0 or later
+- Spring Boot 2.7.7 or later
 - Database Server version: 10.4.27-MariaDB - mariadb.org binary distribution or later
 - Protocol version: 10 - later
 
