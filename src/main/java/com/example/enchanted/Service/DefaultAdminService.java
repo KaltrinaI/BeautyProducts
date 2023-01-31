@@ -13,54 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DefaultAdminService implements  AdminService{
-    @Autowired
+public class DefaultAdminService implements AdminService {
     private ProductRepository productRepository;
-    @Autowired
     private CustomerRepository customerRepository;
 
-
-    @Override
-    public List<Product> findAll() {
-        List<Product> listOfProducts = new ArrayList<>();
-        Iterable<Product> products = productRepository.findAll();
-        for (Product product: products){
-            listOfProducts.add(product);
-        }
-        return listOfProducts;
-    }
-
-    @Override
-    public Product findProductById(Integer id) {
-        return productRepository.findById(id).get();
-    }
-
-    @Override
-    public List<Product> findProductByCategory(Category category) {
-        return productRepository.findProductByCategory(category);
-    }
-
-    @Override
-    public List<Product> findProductByColor(String color) {
-
-        return productRepository.findProductByColor(color);
-    }
-
-    @Override
-    public List<Product> findProductByPrice(double price) {
-
-        return productRepository.findProductByPrice(price);
-    }
-
-    @Override
-    public List<Product> findProductByType(String type) {
-
-        return productRepository.findProductByType(type);
-    }
-
-    @Override
-    public List<Product> findProductByCategoryAndColor(Category category, String color) {
-        return productRepository.findProductByCategoryAndColor(category,color);
+    @Autowired
+    public DefaultAdminService(ProductRepository productRepository, CustomerRepository customerRepository){
+        this.productRepository=productRepository;
+        this.customerRepository=customerRepository;
     }
 
     @Override

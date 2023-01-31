@@ -22,7 +22,7 @@ public class CustomerController {
      *Finding products that are saved on the database
      * @return List of products
      */
-    @GetMapping("/products")
+    @GetMapping("/findProducts")
     public List<Product> getAll() {
         return customerService.findAll();
     }
@@ -45,7 +45,7 @@ public class CustomerController {
      * @return List of products by the specified category
      */
 
-    @GetMapping("/productByCategory/{category}")
+    @GetMapping("/productsByCategory/{category}")
     public List<Product> findProductByCategory(@PathVariable Category category){
         return customerService.findProductByCategory(category);
     }
@@ -56,7 +56,7 @@ public class CustomerController {
      * @return List of products by the specified color
      */
 
-    @GetMapping("/productByColor/{color}")
+    @GetMapping("/productsByColor/{color}")
     public List<Product> findProductByColor (@PathVariable String color){
         return customerService.findProductByColor(color);
 
@@ -67,7 +67,7 @@ public class CustomerController {
      * @param price
      * @return List of products by the specified price
      */
-    @GetMapping("/productByPrice/{price}")
+    @GetMapping("/productsByPrice/{price}")
     public List<Product> findProductByPrice (@PathVariable double price){
         return customerService.findProductByPrice(price);
 
@@ -79,7 +79,7 @@ public class CustomerController {
      * @return List of products with the same type
      */
 
-    @GetMapping("/productByType/{type}")
+    @GetMapping("/productsByType/{type}")
     public List<Product> findProductByType (@PathVariable String type){
         return customerService.findProductByType(type);
 
@@ -92,7 +92,7 @@ public class CustomerController {
      * @return List of products that belong to the same category and same color
      */
 
-    @GetMapping("/product/{category}/{color}")
+    @GetMapping("/products/{category}/{color}")
     public List<Product> findProductByCategoryAndColor(@PathVariable Category category, @PathVariable String color){
         return customerService.findProductByCategoryAndColor(category,color);
 

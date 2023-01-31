@@ -13,84 +13,6 @@ public class AdminController {
     AdminService adminService;
 
     /**
-     *List of all products that are saved on database
-     * @return List of products
-     */
-    @GetMapping("/admin/findProducts")
-    public List<Product> getAll() {
-        return adminService.findAll();
-    }
-
-    /**
-     * Finding a specific Product by its ID
-     * @param id
-     * @return Product by the specified ID
-     */
-    @GetMapping("/admin/productById/{id}")
-
-    Product findProductById(@PathVariable Integer id){
-        return adminService.findProductById(id);
-
-    }
-
-    /**
-     * Finding products that belong to the same category
-     * @param category
-     * @return List of products by the specified category
-     */
-
-    @GetMapping("/admin/productByCategory/{category}")
-    List<Product> findProductByCategory(@PathVariable Category category){
-        return adminService.findProductByCategory(category);
-    }
-
-    /**
-     * Finding products that have the same color
-     * @param color
-     * @return List of products by the specified color
-     */
-    @GetMapping("/admin/productByColor/{color}")
-    List<Product> findProductByColor (@PathVariable String color){
-        return adminService.findProductByColor(color);
-
-    }
-
-    /**
-     *Finding products that have the same price
-     * @param price
-     * @return List of products by the specified price
-     */
-    @GetMapping("/admin/productByPrice/{price}")
-    List<Product> findProductByPrice (@PathVariable double price){
-        return adminService.findProductByPrice(price);
-
-    }
-
-    /**
-     *Finding products that have the same type
-     * @param type
-     * @return List of products with the same type
-     */
-    @GetMapping("/admin/productByType/{type}")
-    List<Product> findProductByType (@PathVariable String type){
-        return adminService.findProductByType(type);
-
-    }
-
-    /**
-     *Finding products by the category that they belong and by the color of the product
-     * @param category
-     * @param color
-     * @return List of products that belong to the same category and same color
-     */
-
-    @GetMapping("/admin/product/{category}/{color}")
-    public List<Product> findProductByCategoryAndColor(@PathVariable Category category, @PathVariable String color){
-        return adminService.findProductByCategoryAndColor(category,color);
-
-    }
-
-    /**
      * Deleting a product from the database by its ID
      * @param id
      */
@@ -122,7 +44,7 @@ public class AdminController {
      * @param input
      * @return Product with edited fields
      */
-    @PutMapping("/editProduct/{id}")
+    @PutMapping("/admin/editProduct/{id}")
     public Product edit(@PathVariable Integer id,
                         @RequestBody EditProductInput input){
         String newName = input.getName();
@@ -136,7 +58,7 @@ public class AdminController {
      * @return Products whose available quantity is equal to 0
      */
 
-    @GetMapping("/admin/outOfStock")
+    @GetMapping("/outOfStock")
     public List<Product> outOfStockProducts(){
         return adminService.outOfStockProducts();
 
@@ -147,7 +69,7 @@ public class AdminController {
      * @return List of Customers
      */
 
-    @GetMapping("/admin/customers")
+    @GetMapping("/customers")
     public List<Customer> findAllCustomers() {
         return adminService.findAllCustomers();
     }

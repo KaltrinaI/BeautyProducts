@@ -54,10 +54,6 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
     )
     List<Product> outOfStock();
 
-    @Query(
-            "SELECT po.product FROM ProductOrder po where po.cart.id= :cartId"
-    )
-    List<Product> viewProductsInCart(Integer cartId);
 
 
 

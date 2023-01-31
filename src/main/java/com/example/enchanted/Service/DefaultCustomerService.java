@@ -24,6 +24,9 @@ public class DefaultCustomerService implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    public DefaultCustomerService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Override
     public List<Product> findAll() {
@@ -38,7 +41,7 @@ public class DefaultCustomerService implements CustomerService {
 
     @Override
     public Product findProductById(Integer id) {
-        return productRepository.findById(id).get();
+        return productRepository.findProductById(id);
     }
 
     @Override
