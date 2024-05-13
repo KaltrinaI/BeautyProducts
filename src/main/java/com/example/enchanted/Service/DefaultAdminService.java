@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,10 @@ public class DefaultAdminService implements AdminService {
 
     @Override
     public Product edit(Integer id, String name, double price, Integer availableQuantity) {
+        if (price <= 0) {
+            throw new IllegalArgumentException("Price must be greater than zero");
+        }
+
         Product product = productRepository.findProductById(id);
         if (product==null){
             return null;
@@ -63,11 +68,24 @@ public class DefaultAdminService implements AdminService {
 
     @Override
     public void delete(Integer id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("Product with ID " + id + " not found.");
+        }
         productRepository.deleteById(id);
     }
 
     @Override
     public Product create(String name, Category category, String type, String color, double price, Integer availableQuantity) {
+
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty.");
+        }
+        if (price <= 0) {
+            throw new IllegalArgumentException("Price must be greater than zero.");
+        }
+        if (availableQuantity < 0) {
+            throw new IllegalArgumentException("Available quantity cannot be negative.");
+        }
         Product product = new Product();
         product.setName(name);
         product.setCategory(category);
