@@ -64,11 +64,11 @@ public class AdminServiceTests {
         // Arrange
         when(productRepository.findProductById(1)).thenReturn(null);
 
-        // Act
-        Product result = adminService.edit(1, "New Name", 150.0, 5);
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            adminService.edit(1, "New Name", 150.0, 5);
+        });
 
-        // Assert
-        assertNull(result, "The method should return null for non-existing product.");
+        assertEquals("Product with ID 1 not found.", exception.getMessage());
     }
     @Test
     public void testEditProduct_NegativePriceThrowsException() {
@@ -78,6 +78,25 @@ public class AdminServiceTests {
 
         assertEquals("Price must be greater than zero", exception.getMessage());
     }
+
+    @Test
+    public void testEditProduct_EmptyProductNameThrowsException() {
+        // Arrange & Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            adminService.edit(1, "", 150.0, 5);
+        });
+
+        assertEquals("Product name cannot be empty.", exception.getMessage());
+    }
+    @Test
+    public void testEditProduct_NegativeAvailableQuantityThrowsException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            adminService.edit(1, "New Name", 150.0, -5);
+        });
+
+        assertEquals("Available quantity cannot be negative.", exception.getMessage());
+    }
+
 
     @Test
     public void testOutOfStockProducts_WhenProductsAreOutOfStock() {
@@ -172,11 +191,12 @@ public class AdminServiceTests {
         // Arrange
         when(customerRepository.findCustomerById(1)).thenReturn(null);
 
-        // Act
-        Customer actualCustomer = adminService.findCustomerById(1);
+        // Act & Assert
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            adminService.findCustomerById(1);
+        });
 
-        // Assert
-        assertNull(actualCustomer, "Customer should be null when not found.");
+        assertEquals("Customer with ID 1 not found.", exception.getMessage());
     }
 
     @Test
@@ -184,8 +204,8 @@ public class AdminServiceTests {
         // Arrange
         Customer expectedCustomer = new Customer();
         expectedCustomer.setId(1);
-        expectedCustomer.setCart(new Cart()); // Assuming Cart is a class linked to Customer
-        expectedCustomer.getCart().setId(10); // Set cart ID for linkage
+        expectedCustomer.setCart(new Cart());
+        expectedCustomer.getCart().setId(10);
         expectedCustomer.setName("Jane Doe");
 
         when(customerRepository.findCustomerByCartId(10)).thenReturn(expectedCustomer);
@@ -203,11 +223,12 @@ public class AdminServiceTests {
         // Arrange
         when(customerRepository.findCustomerByCartId(10)).thenReturn(null);
 
-        // Act
-        Customer actualCustomer = adminService.findCustomerByCartId(10);
+        // Act & Assert
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            adminService.findCustomerByCartId(10);
+        });
 
-        // Assert
-        assertNull(actualCustomer, "Customer should be null when not found.");
+        assertEquals("Customer with cart ID 10 not found.", exception.getMessage());
     }
 
     @Test
@@ -217,7 +238,10 @@ public class AdminServiceTests {
         when(productRepository.existsById(nonExistentProductId)).thenReturn(false);
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class, () -> adminService.delete(nonExistentProductId));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            adminService.delete(nonExistentProductId);
+        });
+        assertEquals("Product with ID " + nonExistentProductId + " not found.", exception.getMessage());
         verify(productRepository, never()).deleteById(nonExistentProductId);
     }
     @Test
