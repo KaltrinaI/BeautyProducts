@@ -26,13 +26,20 @@ public class DefaultAdminService implements AdminService {
 
     @Override
     public Product edit(Integer id, String name, double price, Integer availableQuantity) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty.");
+        }
         if (price <= 0) {
             throw new IllegalArgumentException("Price must be greater than zero");
         }
+        if (availableQuantity < 0) {
+            throw new IllegalArgumentException("Available quantity cannot be negative.");
+        }
 
+        
         Product product = productRepository.findProductById(id);
         if (product==null){
-            return null;
+            throw new EntityNotFoundException("Product with ID " + id + " not found.");
         }
         product.setName(name);
         product.setPrice(price);
@@ -58,12 +65,20 @@ public class DefaultAdminService implements AdminService {
 
     @Override
     public Customer findCustomerById(Integer id) {
-        return customerRepository.findCustomerById(id);
+        Customer customer = customerRepository.findCustomerById(id);
+        if (customer == null) {
+            throw new EntityNotFoundException("Customer with ID " + id + " not found.");
+        }
+        return customer;
     }
 
     @Override
     public Customer findCustomerByCartId(Integer id) {
-        return customerRepository.findCustomerByCartId(id);
+        Customer customer = customerRepository.findCustomerByCartId(id);
+        if (customer == null) {
+            throw new EntityNotFoundException("Customer with cart ID " + id + " not found.");
+        }
+        return customer;
     }
 
     @Override
