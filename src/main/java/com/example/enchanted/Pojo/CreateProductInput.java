@@ -1,11 +1,22 @@
 package com.example.enchanted.Pojo;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 public class CreateProductInput {
+    @NotBlank(message = "Product name cannot be empty.")
     private String name;
+    @NotNull(message = "Category cannot be null.")
     private Category category;
+    @NotBlank(message = "Type cannot be empty.")
     private String type;
+    @NotBlank(message = "Color cannot be empty.")
     private String color;
+    @Positive(message = "Price must be greater than zero.")
     private double price;
+    @Min(value = 0, message = "Available quantity cannot be negative.")
     private Integer availableQuantity;
 
     public CreateProductInput(String name, Category category, String type, String color, double price, Integer availableQuantity) {
