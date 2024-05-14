@@ -3,99 +3,109 @@ package com.example.enchanted.Controller;
 import com.example.enchanted.Pojo.*;
 import com.example.enchanted.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 public class AdminController {
     @Autowired
     AdminService adminService;
-
     /**
      * Deleting a product from the database by its ID
+     *
      * @param id
      */
     @DeleteMapping("/admin/deleteProduct/{id}")
-    public void delete (@PathVariable Integer id){
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         adminService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      * Adding a product to the database by specifying its name, category, type, color, price and available quantity
+     *
      * @param input
      * @return Created Product
      */
     @PostMapping("/admin/createProduct")
-    public Product create(@RequestBody CreateProductInput input){
-        String newProductName= input.getName();
-        Category newProductCategory=input.getCategory();
-        String newProductType=input.getType();
-        String newProductColor=input.getColor();
-        double newProductPrice=input.getPrice();
-        Integer newProductStock=input.getAvailableQuantity();
-
-        return adminService.create(newProductName,newProductCategory,newProductType,newProductColor,newProductPrice,newProductStock);
+    public ResponseEntity<Product> create(@Valid @RequestBody CreateProductInput input) {
+        Product createdProduct = adminService.create(input.getName(), input.getCategory(), input.getType(), input.getColor(), input.getPrice(), input.getAvailableQuantity());
+        return new ResponseEntity<>(createdProduct, HttpStatus.OK);
     }
 
     /**
      * Changing the name, price and the quantity of a product
+     *
      * @param id
      * @param input
      * @return Product with edited fields
      */
     @PutMapping("/admin/editProduct/{id}")
-    public Product edit(@PathVariable Integer id,
-                        @RequestBody EditProductInput input){
-        String newName = input.getName();
-        double newPrice = input.getPrice();
-        Integer newQuantity = input.getAvailableQuantity();
-        return adminService.edit(id,newName,newPrice,newQuantity);
+    public ResponseEntity<Product> edit(@PathVariable Integer id, @Valid @RequestBody EditProductInput input) {
+        Product updatedProduct = adminService.edit(id, input.getName(), input.getPrice(), input.getAvailableQuantity());
+        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     /**
-     *Finding products that are out of Stock
+     * Finding products that are out of Stock
+     *
      * @return Products whose available quantity is equal to 0
      */
 
     @GetMapping("/outOfStock")
-    public List<Product> outOfStockProducts(){
-        return adminService.outOfStockProducts();
-
+    public ResponseEntity<List<Product>> outOfStockProducts() {
+        List<Product> products = adminService.outOfStockProducts();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     /**
-     *Finding Customers that are registered in the database
+     * Finding Customers that are registered in the database
+     *
      * @return List of Customers
      */
 
     @GetMapping("/customers")
-    public List<Customer> findAllCustomers() {
-        return adminService.findAllCustomers();
+    public ResponseEntity<List<Customer>> findAllCustomers() {
+        List<Customer> customers = adminService.findAllCustomers();
+        return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
     /**
      * Finding a Customer by its ID
+     *
      * @param id
      * @return Customer by ID
      */
 
     @GetMapping("/findCustomerById/{id}")
-    public Customer findCustomerById(@PathVariable Integer id){
-        return adminService.findCustomerById(id);
+    public ResponseEntity<Customer> findCustomerById(@PathVariable Integer id) {
+        Customer customer = adminService.findCustomerById(id);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
     /**
-     *Finding a customer by its Cart ID
+     * Finding a customer by its Cart ID
+     *
      * @param id
      * @return Customer by its cart ID
      */
 
     @GetMapping("/findCustomerByCartId/{id}")
-    public Customer findCustomerByCartId(@PathVariable Integer id){
-        return adminService.findCustomerByCartId(id);
+    public ResponseEntity<Customer> findCustomerByCartId(@PathVariable Integer id) {
+        Customer customer = adminService.findCustomerByCartId(id);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ex.getMessage();
+    }
 
 }
