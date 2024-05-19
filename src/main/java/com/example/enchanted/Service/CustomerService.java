@@ -13,7 +13,7 @@ public interface CustomerService {
     List<Product> findProductByPrice (double price);
     List<Product> findProductByType (String type);
     List<Product> findProductByCategoryAndColor(Category category, String color);
-    void createOrder(Integer cartId, Product product, Integer productAmount) throws InsufficientAmountException;
+    void createOrder(Integer cartId, Product product, Integer productAmount);
     void deleteProductFromCart(Integer cartId,Integer productId);
     ProductOrder editAmount(Integer cartId, Integer productId,Integer amount);
     Customer registerCustomer(String name, String email, String phoneNumber, String address);
